@@ -1,104 +1,273 @@
-# I Portfolio — Ishaan Maheshwari
+# I. — Personal Portfolio
 
-A monochrome, desktop-inspired portfolio built with React, TypeScript, and Vite, with a separate FastAPI backend for the Ask Ishaan AI assistant.
+A minimal, interactive, desktop-inspired personal portfolio built to showcase my profile, projects, technical skills, and resume, with integrated AI-powered features.
 
-## Project structure
+**Live Website:** https://ishaan-portfolio-kappa.vercel.app  
+**Backend API:** https://i-portfolio-api.onrender.com  
+**API Health Check:** https://i-portfolio-api.onrender.com/api/health
 
-- `src/` — React portfolio frontend.
-- `backend/app/` — FastAPI service, portfolio knowledge base, and Groq-powered chat endpoint.
-- `public/resume.pdf` — downloadable resume.
+---
 
-## Run locally
+## Overview
 
-Requirements: Node.js 20.19+ (or 22.12+) and Python 3.10+.
+I. is a personal portfolio designed around a minimal desktop-inspired interface. Instead of presenting information through a conventional scrolling portfolio, it organizes different sections into interactive applications accessible through a vertical navigation system.
 
-### 1. Start the backend
+The project combines a React frontend with a FastAPI backend to deliver a responsive portfolio experience, including an AI-powered portfolio assistant and a Job Description Matcher.
 
-From the project root:
+## Features
 
-```powershell
-cd backend
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-Copy-Item .env.example .env
+- **Home:** Introduction and personal profile.
+- **Projects:** Showcase of projects and development work.
+- **Resume:** Access to professional and academic information.
+- **JD Matcher:** Evaluates alignment between a resume and a supplied job description, highlighting matching skills and areas that may need attention.
+- **Ask AI:** An AI-powered assistant that answers questions using documented portfolio information.
+- **Contact:** Contact information and external profile links.
+
+### Interface and Experience
+
+- Minimal, dark desktop-inspired interface.
+- Subtle animated particle background.
+- Vertical application navigation with icons and labels.
+- Live clock.
+- Smooth transitions between sections.
+- Responsive layout.
+- Social links and shortcuts.
+
+## Technology Stack
+
+| Layer | Technologies |
+|---|---|
+| Frontend | React, TypeScript, Vite |
+| Styling and UI | CSS, Framer Motion, Lucide |
+| Backend | Python, FastAPI |
+| AI Integration | Groq API |
+| Knowledge Storage | Database-backed static portfolio knowledge |
+| Deployment | Vercel, Render |
+| Version Control | Git, GitHub |
+
+## Architecture
+
+The application follows a frontend-backend architecture.
+
+```mermaid
+flowchart TD
+    U["Visitor"] --> F["React + TypeScript Frontend"]
+    F --> V["Vercel Deployment"]
+
+    F --> API["FastAPI Backend"]
+    API --> C["CORS Middleware"]
+    C --> R["API Routes"]
+
+    R --> H["Health Check"]
+    R --> JD["JD Matcher"]
+    R --> AI["Ask AI"]
+
+    AI --> K["Portfolio Knowledge Base"]
+    K --> DB[("Database")]
+
+    AI --> G["Groq API"]
+    JD --> G
 ```
 
-Open `backend/.env` and add your Groq API key:
+### How It Works
+
+1. Visitors interact with the React frontend.
+2. The frontend communicates with the FastAPI backend through API requests.
+3. The backend exposes dedicated endpoints for health checks, AI conversations, and job description matching.
+4. Ask AI uses the portfolio's documented knowledge base to provide relevant answers.
+5. The AI-powered functionality communicates with the Groq API.
+6. The frontend and backend are deployed independently using Vercel and Render.
+
+## Backend API
+
+The FastAPI backend currently exposes the following endpoints:
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/health` | Backend health check |
+| POST | `/api/chat` | Portfolio AI assistant |
+| POST | `/api/jd-match` | Job description matching |
+
+The backend also includes CORS configuration and request rate limiting.
+
+## Project Structure
+
+```text
+portfolio/
+│
+├── backend/
+│   ├── app/
+│   │   └── main.py
+│   ├── requirements.txt
+│   ├── render.yaml
+│   └── .env.example
+│
+├── public/
+├── src/
+│
+├── package.json
+├── vercel.json
+├── .env.example
+└── README.md
+```
+
+## Running Locally
+
+### Prerequisites
+
+- Node.js and npm
+- Python 3.11+
+- A Groq API key
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/csequenc/portfolio.git
+cd portfolio
+```
+
+### 2. Configure the Frontend
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+The root `.env.example` can be used as a reference for frontend configuration.
+
+For local development, leave `VITE_API_BASE_URL` unset so Vite can proxy API requests to the local backend.
+
+### 3. Configure the Backend
+
+Navigate to the backend directory:
+
+```bash
+cd backend
+```
+
+Create and activate a virtual environment.
+
+**Windows:**
+
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+**macOS / Linux:**
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Create a `.env` file using `.env.example` as a reference.
+
+Configure the following variables:
 
 ```env
-GROQ_API_KEY=your_real_groq_api_key
+GROQ_API_KEY=your_groq_api_key
 GROQ_MODEL=openai/gpt-oss-120b
 FRONTEND_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 ```
 
-Then start the API:
+Never commit actual API keys or secrets to the repository.
 
-```powershell
+### 4. Start the Backend
+
+From the `backend` directory:
+
+```bash
 uvicorn app.main:app --reload --port 8000
 ```
 
-The health endpoint is `http://localhost:8000/api/health` and interactive API docs are at `http://localhost:8000/docs`.
+The backend will be available at:
 
-### 2. Start the frontend
+```text
+http://localhost:8000
+```
 
-Open a second terminal at the project root:
+### 5. Start the Frontend
 
-```powershell
-npm install
+Open another terminal in the project root:
+
+```bash
 npm run dev
 ```
 
-Open the Vite URL (usually `http://localhost:5173`). Vite proxies `/api` requests to the local FastAPI server.
+The frontend will be available at:
 
-## Ask Ishaan architecture
+```text
+http://localhost:5173
+```
 
-1. The browser sends the latest question and a short session history to `POST /api/chat`.
-2. FastAPI retrieves up to three relevant entries from `backend/app/knowledge.py`.
-3. The backend sends only those curated portfolio notes to Groq, with instructions to stay grounded and not invent details.
-4. The API returns the answer and the names of the notes used as sources.
+### 6. Production Build
 
-The Groq API key stays in the backend environment and is never sent to the browser. Chat messages are not written to a database; the browser keeps the visible chat history in `sessionStorage` for the current tab session. The backend is stateless. The assistant can still miss a question if the lightweight keyword retriever cannot find the right notes; this can later be upgraded to embeddings without changing the frontend contract.
+To generate the frontend production build:
+
+```bash
+npm run build
+```
+
+The generated files will be available in the `dist/` directory.
+
+## Environment Variables
+
+### Frontend
+
+| Variable | Description |
+|---|---|
+| `VITE_API_BASE_URL` | Base URL of the FastAPI backend. Leave unset for local development. |
+
+### Backend
+
+| Variable | Description |
+|---|---|
+| `GROQ_API_KEY` | API key used for Groq integration. |
+| `GROQ_MODEL` | Model used for AI-powered functionality. |
+| `FRONTEND_ORIGINS` | Comma-separated list of permitted frontend origins. |
 
 ## Deployment
 
-The included deployment setup is intended for **Vercel (frontend) + Render (FastAPI backend)**.
+The application uses separate hosting platforms for the frontend and backend.
 
-### Backend on Render
+| Component | Platform | Deployment |
+|---|---|---|
+| Frontend | Vercel | https://ishaan-portfolio-kappa.vercel.app |
+| Backend | Render | https://i-portfolio-api.onrender.com |
 
-1. Push the project to GitHub.
-2. Create a new Render Web Service from the repository and use `backend/render.yaml` (or configure the service manually with root directory `backend`, build command `pip install -r requirements.txt`, and start command `uvicorn app.main:app --host 0.0.0.0 --port $PORT`).
-3. Add environment variables in Render:
-   - `GROQ_API_KEY` — your Groq key.
-   - `GROQ_MODEL` — `openai/gpt-oss-120b` (or another model available to your Groq account).
-   - `FRONTEND_ORIGINS` — the exact deployed Vercel origin, e.g. `https://your-site.vercel.app`.
-4. Confirm `https://YOUR-API.onrender.com/api/health` returns `{"status":"ok",...}`.
+The frontend uses `VITE_API_BASE_URL` to communicate with the deployed backend.
 
-### Frontend on Vercel
+The backend uses `FRONTEND_ORIGINS` to allow requests from the deployed frontend.
 
-1. Import the same GitHub repository into Vercel; the included `vercel.json` uses Vite's `dist` output.
-2. Add the environment variable `VITE_API_BASE_URL` with the Render service origin, e.g. `https://YOUR-API.onrender.com` (no trailing slash).
-3. Deploy. If you use a custom domain, add that exact origin to the backend's `FRONTEND_ORIGINS` value and redeploy/restart the backend.
+## Current Scope and Future Improvements
 
-The frontend build is static; the backend must be deployed separately for Ask Ishaan to answer. Keep `.env` files and API keys out of GitHub.
+Version 1 focuses on delivering the core portfolio experience and its integrated AI functionality.
 
-## Included applications
+The Ask AI feature currently uses a static, database-backed portfolio knowledge base. This keeps the information controlled, structured, and predictable rather than relying on automatic repository extraction.
 
-- **Welcome** — introduction and quick links.
-- **Projects** — three selected projects, details, technologies, and repository links.
-- **Resume** — embedded PDF viewer and download action.
-- **JD Matcher** — local keyword-overlap comparison against terms in the resume. It is a heuristic, not an AI suitability score; the pasted JD is not uploaded.
-- **Ask Ishaan** — Groq-powered assistant grounded in the curated portfolio knowledge base, with source labels and session-only chat history.
-- **Contact** — email copy action and professional links.
+Planned improvements include:
 
-## Desktop behaviour
+- Expanding the portfolio knowledge base with detailed project documentation.
+- Updating `knowledge.py` as additional GitHub projects are completed and documented.
+- Improving project-specific AI responses with richer technical context.
+- Further refinement of the AI assistant and job description matching experience.
 
-- One application is visible at a time; Welcome opens by default.
-- The sidebar switches applications. Closing the window returns to the empty desktop.
-- Maximize/restore and close controls are provided; there is no minimize or dragging.
-- On mobile, the sidebar becomes a bottom application dock and the app window uses the available screen space.
-- `Escape` closes the current app. `Alt + →` cycles to the next app.
+Automatic GitHub repository extraction is not part of the current implementation.
 
-## Updating portfolio content
+## Author
 
-Project descriptions live in `src/content/projects.json`. Assistant facts and source text live in `backend/app/knowledge.py`. Update both when a project or resume detail changes.
+**Ishaan Maheshwari**
+
+- GitHub: https://github.com/csequenc
+
+---
+
+*Built as a personal portfolio and an exploration of interactive frontend design, backend development, and applied AI integration.*
