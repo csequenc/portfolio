@@ -1,0 +1,50 @@
+[
+  {
+    "id":"memorymesh",
+    "title":"MemoryMesh",
+    "subtitle":"Conflict-aware AI memory engine",
+    "status":"Independent project",
+    "summary":"A persistent memory system that turns natural-language statements into structured facts, retrieves semantically related memories, and reasons about how new information relates to what is already known.",
+    "bullets":[
+      "Built structured memory extraction, semantic retrieval, conversational querying, and a FastAPI backend.",
+      "Separated LLM-based semantic judgment from deterministic resolution and database state changes.",
+      "Implemented duplicate, superseding, coexisting, conflicting, and unrelated memory outcomes.",
+      "Evaluated resolution across 25 scenarios: 21 passed (84%), with judgment-sensitive cases documented."
+    ],
+    "stack":["Python","FastAPI","Groq","Sentence Transformers","SQLAlchemy","SQLite","React","TypeScript","Cytoscape.js"],
+    "github":"https://github.com/csequenc/MemoryMesh",
+    "featured":true
+  },
+  {
+    "id":"lora-dora",
+    "title":"LoRA vs. DoRA",
+    "subtitle":"A rank-8 case study on text-to-SQL",
+    "status":"Independent research project",
+    "summary":"A controlled comparison of rank-8 LoRA and DoRA fine-tuning on Qwen2.5-1.5B for the Spider text-to-SQL task, with repeated seeds and execution-based evaluation.",
+    "bullets":[
+      "Compared identical hyperparameters using execution accuracy on 300 held-out examples.",
+      "Repeated experiments across three seeds; 89.7% per-example agreement and query-complexity analysis indicated the accuracy gap was indistinguishable from training noise.",
+      "Measured approximately 20% lower DoRA training throughput and traced the cost to per-step weight-norm computation.",
+      "Documented methodology, results, and reproducible evaluation tooling."
+    ],
+    "stack":["Python","PyTorch","PEFT","Hugging Face Transformers","Qwen2.5-1.5B","Spider"],
+    "github":"https://github.com/csequenc",
+    "featured":true
+  },
+  {
+    "id":"rag-agent",
+    "title":"RAG & Agentic AI System",
+    "subtitle":"Grounded retrieval and tool-calling workflows",
+    "status":"Independent project",
+    "summary":"A modular retrieval-augmented generation and tool-calling system built from first principles, evaluated for correctness, grounding, hallucination, and completeness.",
+    "bullets":[
+      "Built modular RAG workflows with Sentence Transformers and FAISS, then migrated the architecture to LangChain.",
+      "Created a gold-question evaluation pipeline with LLM-as-judge scoring and regression tests.",
+      "Implemented and evaluated a prompt-injection guardrail.",
+      "Exposed the system through a FastAPI REST API with structured request logging."
+    ],
+    "stack":["Python","LangChain","Sentence Transformers","FAISS","Groq","FastAPI"],
+    "github":"https://github.com/csequenc/ai-rag-agent",
+    "featured":true
+  }
+]
