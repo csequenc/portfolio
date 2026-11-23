@@ -1,4 +1,4 @@
-# I. — Personal Portfolio
+# I. - Personal Portfolio
 
 A minimal, interactive, desktop-inspired personal portfolio built to showcase my profile, projects, technical skills, and resume, with integrated AI-powered features.
 
@@ -20,7 +20,7 @@ The project combines a React frontend with a FastAPI backend to deliver a respon
 - **Projects:** Showcase of projects and development work.
 - **Resume:** Access to professional and academic information.
 - **JD Matcher:** Evaluates alignment between a resume and a supplied job description, highlighting matching skills and areas that may need attention.
-- **Ask AI:** An AI-powered assistant that answers questions using documented portfolio information.
+- **Ask AI:** An AI-powered portfolio assistant that uses ONNX-based semantic retrieval to find relevant information from a curated knowledge base before generating responses through the Groq API.
 - **Contact:** Contact information and external profile links.
 
 ### Interface and Experience
@@ -41,32 +41,33 @@ The project combines a React frontend with a FastAPI backend to deliver a respon
 | Styling and UI | CSS, Framer Motion, Lucide |
 | Backend | Python, FastAPI |
 | AI Integration | Groq API |
-| Knowledge Storage | Database-backed static portfolio knowledge |
+| Knowledge and Retrieval | Curated Python knowledge base, ONNX embeddings, NumPy vector similarity |
 | Deployment | Vercel, Render |
 | Version Control | Git, GitHub |
 
 ## Architecture
 
-The application follows a frontend-backend architecture.
+The application follows a frontend-backend architecture, with separate processing flows for the portfolio assistant and Job Description Matcher.
 
 ```mermaid
 flowchart TD
     U["Visitor"] --> F["React + TypeScript Frontend"]
-    F --> V["Vercel Deployment"]
-
     F --> API["FastAPI Backend"]
-    API --> C["CORS Middleware"]
-    C --> R["API Routes"]
 
-    R --> H["Health Check"]
-    R --> JD["JD Matcher"]
-    R --> AI["Ask AI"]
+    API --> H["Health Check"]
+    API --> JD["JD Matcher"]
+    API --> AI["Ask AI"]
 
     AI --> K["Portfolio Knowledge Base"]
-    K --> DB[("Database")]
+    K --> E["ONNX Embedding Model"]
+    E --> V["Vector Similarity Retrieval"]
+    V --> C["Relevant Context"]
+    C --> G["Groq API"]
 
-    AI --> G["Groq API"]
     JD --> G
+
+    F -.-> VF["Vercel"]
+    API -.-> RD["Render"]
 ```
 
 ### How It Works
@@ -74,9 +75,10 @@ flowchart TD
 1. Visitors interact with the React frontend.
 2. The frontend communicates with the FastAPI backend through API requests.
 3. The backend exposes dedicated endpoints for health checks, AI conversations, and job description matching.
-4. Ask AI uses the portfolio's documented knowledge base to provide relevant answers.
-5. The AI-powered functionality communicates with the Groq API.
-6. The frontend and backend are deployed independently using Vercel and Render.
+4. Ask AI converts the visitor's query into an embedding and retrieves semantically relevant information from the curated portfolio knowledge base.
+5. The retrieved context is passed to the Groq API to generate a response grounded in documented portfolio information.
+6. The JD Matcher processes a supplied job description and evaluates its alignment with the available resume information.
+7. The frontend and backend are deployed independently using Vercel and Render.
 
 ## Backend API
 
@@ -97,8 +99,10 @@ portfolio/
 │
 ├── backend/
 │   ├── app/
-│   │   └── main.py
-│   ├── requirements.txt
+│   │   ├── main.py
+│   │   ├── knowledge.py
+│   │   └── embeddings.py
+│   │
 │   ├── render.yaml
 │   └── .env.example
 │
@@ -162,11 +166,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
+Install dependencies using the project's configured Python environment and dependency setup.
 
 Create a `.env` file using `.env.example` as a reference.
 
@@ -251,7 +251,7 @@ The backend uses `FRONTEND_ORIGINS` to allow requests from the deployed frontend
 
 Version 1 focuses on delivering the core portfolio experience and its integrated AI functionality.
 
-The Ask AI feature currently uses a static, database-backed portfolio knowledge base. This keeps the information controlled, structured, and predictable rather than relying on automatic repository extraction.
+The Ask AI feature currently uses a curated, code-defined portfolio knowledge base with ONNX-based semantic retrieval. This keeps the information controlled, structured, and predictable rather than relying on automatic repository extraction.
 
 Planned improvements include:
 
