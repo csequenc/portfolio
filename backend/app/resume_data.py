@@ -136,7 +136,7 @@ RESUME_DATA = {
                     "the accuracy gap was indistinguishable from training noise."
                 ),
                 (
-                    "Measured a reproducible ~20% lower DoRA training "
+                    "Measured a reproducible ~10-16% lower DoRA training "
                     "throughput across seeds and traced the cost to "
                     "per-step weight-norm computation; published methodology, "
                     "results, and reproducible evaluation tooling."

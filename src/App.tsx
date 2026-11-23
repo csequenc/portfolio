@@ -64,7 +64,7 @@ function Welcome({ open }: { open: (id: AppId) => void }) {
       <div className="eyebrow"><span className="status-dot" /> OPEN TO SELECT OPPORTUNITIES</div>
       <h1>Ishaan<br /><span>Maheshwari.</span></h1>
       <p className="welcome-role">Applied AI Engineering <i>·</i> Computer Science</p>
-      <p className="welcome-intro">I build intelligent systems and study how they behave — from retrieval and persistent memory to language-model fine-tuning and evaluation.</p>
+      <p className="welcome-intro">I build intelligent systems and study how they behave - from retrieval and persistent memory to language-model fine-tuning and evaluation.</p>
       <div className="welcome-actions">
         <button className="primary-action" onClick={() => open('projects')}>Explore selected work <ArrowUpRight size={15} /></button>
         <button className="text-action" onClick={() => open('resume')}>View resume <ChevronRight size={14} /></button>
